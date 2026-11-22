@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "title": "先用解析解判断接收功率变化是否来自孔径截断",
+  "question": "同一束对中高斯光通过不同半径的圆孔，模拟功率差能否与径向积分误差分开？",
+  "value": "这决定下一步应检查离轴模型，还是先修正积分器。",
+  "decision": "是否在本轮数值校验通过后，把下一轮计算用于离轴孔径。",
+  "constraint": "只允许解析计算和本地模拟。示例限接收面、理想高斯光束、同轴圆孔和单位总功率。",
+  "allowed_modes": [
+    "analytic",
+    "simulation"
+  ],
+  "sources": [
+    {
+      "id": "P1",
+      "work": "NIST Special Publication 250-62",
+      "ref": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication250-62.pdf",
+      "location": "附录 E，第 100 页，式（E-3）及有限参照孔径的式（E-4）、（E-5）",
+      "use": "由式（E-3）的孔内功率取 P(a)/P(∞) 得本例透过率。式（E-5）的参照孔径为有限值，取其半径趋于无穷才是本例分母。",
+      "level": "original"
+    },
+    {
+      "id": "P2",
+      "work": "Khwaja 与 Reza，Power Transmittance of a Laterally Shifted Gaussian Beam through a Circular Aperture",
+      "ref": "https://arxiv.org/pdf/1605.04241",
+      "location": "图 1 的偏心孔径几何及随后的透射功率推导",
+      "use": "已有研究处理了离轴圆孔透过率，后续离轴计算用于复核和界定误差。",
+      "level": "original"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "explanation": "孔径从半个束宽放大至一个束宽改变了收集的功率比例。",
+      "prediction": "在固定连续光强下加密积分网格，两个孔径的功率差收敛到非零解析差值",
+      "sources": [
+        "P1"
+      ]
+    },
+    {
+      "id": "H2",
+      "explanation": "如果看见的差异主要来自积分离散化，改变径向分辨率就会显著改变它。",
+      "prediction": "当步长减半，差异的数值误差减小，解析基准可定量检验该误差能否解释所见差异",
+      "sources": [
+        "P1"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "R0",
+      "role": "baseline",
+      "method": "在两种孔径下计算 T(a)=1−exp[−2(a/w)²]。",
+      "resources": "两次标量求值"
+    },
+    {
+      "id": "R1",
+      "role": "candidate",
+      "method": "将同一光强乘径向面积权重，以中点法分别积分，并与 R0 比较。",
+      "resources": "普通 CPU，两个孔径各用 32、64、128 个区间"
+    }
+  ],
+  "tests": [
+    {
+      "id": "T1",
+      "mode": "simulation",
+      "routes": [
+        "R0",
+        "R1"
+      ],
+      "hypotheses": [
+        "H1",
+        "H2"
+      ],
+      "action": "使 a/w 分别取 0.5 和 1，逐次加倍积分区间数。",
+      "observable": "无量纲收集功率比例和绝对误差",
+      "controls": "总功率、1/e² 束宽、对中位置及接收平面",
+      "resolution": "本教学例把 10⁻⁴ 的绝对误差作为进入后续计算的数值容差，物理应用需另定误差预算",
+      "resources": "一次运行包含 6 组确定性计算",
+      "proceed": "若两种孔径在 128 区间时均满足容差且差值显著大于误差，保留孔径效应并转入离轴校验。",
+      "pivot": "若加密后仍偏离解析解且偏差随半径系统变化，先核归一化和面积权重。",
+      "inconclusive": "若误差仍随细化而减小但跨过容差，继续细化并保持模型不变。",
+      "state": "observed",
+      "artifact": "pilot.json",
+      "measurements": [
+        {
+          "path": [
+            5,
+            "exact"
+          ],
+          "digits": 6,
+          "display": "0.864665",
+          "phrase": "解析值为 {value}"
+        },
+        {
+          "path": [
+            5,
+            "numeric"
+          ],
+          "digits": 6,
+          "display": "0.864679",
+          "phrase": "128 区间数值为 {value}"
+        },
+        {
+          "path": [
+            6,
+            "numeric_difference"
+          ],
+          "digits": 6,
+          "display": "0.471207",
+          "phrase": "数值功率差为 {value}"
+        },
+        {
+          "path": [
+            6,
+            "analytic_difference"
+          ],
+          "digits": 6,
+          "display": "0.471195",
+          "phrase": "解析功率差为 {value}"
+        },
+        {
+          "path": [
+            6,
+            "error_bound"
+          ],
+          "digits": 6,
+          "display": "0.000017",
+          "phrase": "其和为 {value}"
+        }
+      ],
+      "result": "在 a/w=1 时，解析值为 0.864665，128 区间数值为 0.864679。半径从 0.5w 增至 w 时，数值功率差为 0.471207，解析功率差为 0.471195。两个孔径各自的绝对误差均小于 0.0001，其和为 0.000017（六位小数），远小于观察到的功率差。按预设判据，进入离轴校验。"
+    }
+  ],
+  "choice": "R1",
+  "tradeoff": "用解析基准约束数值法，再把同一积分约定带到离轴情形。仅在对中个例继续加密所获信息较少。",
+  "fallback": "若偏移为零时不能复现 P1 的解析极限，暂停离轴外推并检查半径和面积定义。",
+  "objection": "一次径向积分校验能否支持整个接收链路模型？",
+  "reply": "它只检验对中圆孔的功率积分。进入离轴阶段后需逐点复核 P2 的独立表达式。",
+  "next_milestone": "先经导师确定离轴范围和可接受误差，再提交含中心极限、边缘偏移两端的对照表。"
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "a_over_w": 0.5,
+    "intervals": 32,
+    "numeric": 0.3935100352751209,
+    "exact": 0.39346934028736663,
+    "absolute_error": 4.069498775427505e-05
+  },
+  {
+    "a_over_w": 0.5,
+    "intervals": 64,
+    "numeric": 0.3934795131185979,
+    "exact": 0.39346934028736663,
+    "absolute_error": 1.0172831231280988e-05
+  },
+  {
+    "a_over_w": 0.5,
+    "intervals": 128,
+    "numeric": 0.3934718834379508,
+    "exact": 0.39346934028736663,
+    "absolute_error": 2.5431505841777557e-06
+  },
+  {
+    "a_over_w": 1.0,
+    "intervals": 32,
+    "numeric": 0.8648936270661989,
+    "exact": 0.8646647167633873,
+    "absolute_error": 0.0002289103028115802
+  },
+  {
+    "a_over_w": 1.0,
+    "intervals": 64,
+    "numeric": 0.8647219315494656,
+    "exact": 0.8646647167633873,
+    "absolute_error": 5.7214786078341184e-05
+  },
+  {
+    "a_over_w": 1.0,
+    "intervals": 128,
+    "numeric": 0.864679019660839,
+    "exact": 0.8646647167633873,
+    "absolute_error": 1.4302897451745622e-05
+  },
+  {
+    "kind": "between_apertures",
+    "numeric_difference": 0.47120713622288823,
+    "analytic_difference": 0.47119537647602067,
+    "difference_error": 1.1759746867567866e-05,
+    "error_bound": 1.6846048035923378e-05
+  }
+]

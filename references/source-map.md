@@ -2,6 +2,8 @@
 
 每条来源固定到选入时的 Git 提交。下表列出原入口中的操作、在此技能中的处理与执行位置。配套项单列关键模板、提示或判据入口，便于复查。各流程提示以中文重新编写。
 
+[6 个新增工作流及实际动作](proposal-workflow.md#工作流的固定来源)与下列 20 个原入口提供规划方法，另有[计算实施来源与对应动作](computational-handoff.md)。
+
 ## 从流程查来源
 
 - [目标、问题与决策](problem.md)　[proposal-logic-review](#s741)、[clarify-research-idea](#s426)、[research-question-framing](#s382)、[research-pipeline-planner](#s3195)、[research-pragmatist](#s375)、[research-idea](#s34)、[develop-research-questions](#s393)、[research-questions](#s385)、[problem-framing](#s410)、[thesis-topic-checkup](#s745)

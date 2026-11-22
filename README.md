@@ -8,6 +8,6 @@
 
 可以直接提供笔记或查新报告。科学主张由有出处的证据支撑；预计结果、所需设备和未决事项会明确列出。
 
-[技能入口](SKILL.md) · [来源与方法](references/source-map.md)
+[技能入口](SKILL.md) · [默认流程与 6 个新增来源](references/proposal-workflow.md) · [含实际计算记录的光学示例](examples/aperture/proposal.json) · [原 20 个技能](references/source-map.md) · [计算验证、实跑命令和实施来源](references/computational-handoff.md)
 
 [上游固定版本、可用附件与缺件说明](references/source-availability.md)
