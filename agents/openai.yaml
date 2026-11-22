@@ -1,0 +1,4 @@
+interface:
+  display_name: "导师讨论方案"
+  short_description: "把科研直觉、证据和资源条件整理成可供导师讨论的方案"
+  default_prompt: "用 $advisor-proposal-builder 将我的想法和现有材料整理成导师讨论稿，写明备选解释、最小验证及待决问题。"
