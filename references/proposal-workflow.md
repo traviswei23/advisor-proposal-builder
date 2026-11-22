@@ -25,7 +25,7 @@
 ## 从正常入口运行工具
 
 1. 在研究项目中运行 `python "<skill>/scripts/proposal.py" init "<case>/proposal.json"`。已有档案则直接读取。填入根字段与 sources、hypotheses、routes、tests，具体字段参见[完整实例](../examples/aperture/proposal.json)。其中 sources 的 ref 指可访问的出版物链接或项目内真实材料。level 选择 original、abstract、metadata 或 user_record。用同一标识符从假设追踪到比较、决策与下一步。
-2. allowed_modes 取用户允许的 simulation、analytic、existing_data、field、laboratory、qualitative 中的适用项。其他方法可用 other 并在范围中写明，tests.mode 必须在其中。默认 test 的 purpose 为 discriminate，至少有一项主验证直接比较互异预测。辅助诊断可标 sanity 或 calibration，并只引用它实际检验的路线。每个 test 对应所比较的解释、路线、观察量、分辨率、对照、预算，以及三种结果的行动。理论研究的“基线”可以是既有定理或特殊情形。“已执行”要有案内非空产物与具体阅读结果；计划用 planned。数值型结果可登记 measurements，每项用 path 选择 JSON 单元格、digits 指定显示小数位、display 指定稿内数值，phrase 用包含 {value} 的短句绑定量名与数值；程序会和结果句一起核对。使用运行工具生成的产物，可在 run_receipt 指向回执，让程序比对文件指纹和成功状态。
+2. allowed_modes 取用户允许的 simulation、analytic、existing_data、field、laboratory、qualitative 中的适用项。其他方法可用 other 并在范围中写明，tests.mode 必须在其中。默认 test 的 purpose 为 discriminate，至少有一项主验证直接比较互异预测。辅助诊断可标 sanity 或 calibration，并只引用它实际检验的路线。每个 test 对应所比较的解释、路线、观察量、分辨率、对照、预算，以及三种结果的行动。理论研究的“基线”可以是既有定理或特殊情形。“已执行”要有案内非空产物与具体阅读结果；计划用 planned。数值型结果可登记 measurements，每项用 path 选择 JSON 单元格、digits 指定显示小数位、display 指定稿内数值，phrase 必须用包含 {value} 的短句绑定量名或组别与数值，同一验证块内各量的上下文应可区分；程序会和结果句一起核对。使用运行工具生成的产物，可在 run_receipt 指向回执，让程序比对文件指纹和成功状态。
 3. 运行 `python "<skill>/scripts/proposal.py" check "<case>/proposal.json"`。退出码 0 表示结构可追踪，1 给出需补齐的内容，2 表示输入或路径无效。再运行 `python "<skill>/scripts/proposal.py" brief "<case>/proposal.json"` 生成可读初稿。初稿相对链接以案例目录为准。核对原文和实际数字，按导师要作的决定整理成完整简报。工具不能判读科学真伪或替导师立项。
 4. 没有 Python 的环境可以人工运行同一表。若证据有限，用材料确能支撑的条件式计划交付，把未决部分指向一次具体行动。整个过程可以独立完成，进已有技能链时将同一主张、路线编号及负结果交给后续阶段。
 

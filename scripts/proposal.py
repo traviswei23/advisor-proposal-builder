@@ -74,6 +74,7 @@ def verify_measurements(row, root, issues):
     if not bindings:
         return
     raw = json.loads(artifact.read_text(encoding="utf-8-sig"))
+    seen_phrases = set()
     for binding in bindings:
         value = raw
         path, digits = binding["path"], binding["digits"]
@@ -86,9 +87,15 @@ def verify_measurements(row, root, issues):
         if type(value) not in (float, int) or not math.isfinite(value):
             raise ValueError("expected a finite measurement")
         expected = format(value, f".{digits}f")
-        phrase = binding.get("phrase", "{value}")
+        phrase = binding.get("phrase")
+        if not has_text(phrase) or not any(c.isalpha() for c in phrase.replace("{value}", "")):
+            issues.append(f"{row['id']}: bind the number to its group or observable in phrase")
+            continue
         if not isinstance(phrase, str) or phrase.count("{value}") != 1:
             raise ValueError("measurement phrase must include exactly one {value}")
+        if phrase in seen_phrases:
+            issues.append(f"{row['id']}: repeated measurement context; distinguish the observations")
+        seen_phrases.add(phrase)
         prefix, suffix = phrase.split("{value}")
         token = r"(?<![0-9.+−-])" + re.escape(expected) + r"(?![0-9.]|[eE][+-]?[0-9])"
         pattern = re.escape(prefix) + token + re.escape(suffix)

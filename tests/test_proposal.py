@@ -75,6 +75,13 @@ class ProposalTests(unittest.TestCase):
         self.assertEqual(self.issues(), "")
         self.assertIn("实现自检涉及路线 R1", render(self.case))
 
+    def test_unlabelled_or_ambiguous_measurements_cannot_certify_swapped_groups(self):
+        row = self.case["tests"][0]
+        del row["measurements"][0]["phrase"]
+        self.assertIn("bind the number to its group", self.issues())
+        row["measurements"][0]["phrase"] = row["measurements"][1]["phrase"]
+        self.assertIn("repeated measurement context", self.issues())
+
     def test_broken_provenance_or_orphaned_route(self):
         self.case["hypotheses"][0]["sources"] = ["missing"]
         self.case["choice"] = "R3"
